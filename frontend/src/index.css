@@ -1,0 +1,68 @@
+@import 'tailwindcss/base';
+@import 'tailwindcss/components';
+@import 'tailwindcss/utilities';
+
+:root {
+  --bg-color: #0B0C0E;
+  --text-color: #EAECEF;
+  --card-bg: #14161A;
+  --input-bg: #1E2128;
+  --border-color: #2A2D36;
+  --placeholder-color: #A3A8AE;
+  --secondary-text: #A3A8AE;
+  --accent-color: #33CC99;
+  --accent-hover: #2BB788;
+}
+
+.light-mode {
+  --bg-color: #F5F7FA;
+  --text-color: #1A1D23;
+  --card-bg: #FFFFFF;
+  --input-bg: #F0F2F5;
+  --border-color: #E5E7EB;
+  --placeholder-color: #9CA3AF;
+  --secondary-text: #6B7280;
+  --accent-color: #33CC99;
+  --accent-hover: #2BB788;
+}
+
+.dark\:bg-\[\#0B0C0E\] {
+  background-color: var(--bg-color);
+}
+.dark\:text-\[\#EAECEF\] {
+  color: var(--text-color);
+}
+.dark\:bg-\[\#14161A\] {
+  background-color: var(--card-bg);
+}
+.light\:bg-\[\#FFFFFF\], 
+.light\:bg-white {
+  background-color: var(--card-bg);
+}
+.light\:bg-\[\#F5F7FA\] {
+  background-color: var(--bg-color);
+}
+.light\:text-\[\#1A1D23\] {
+  color: var(--text-color);
+}
+.dark\:bg-\[\#1E2128\],
+.light\:bg-\[\#F0F2F5\] {
+  background-color: var(--input-bg);
+}
+.dark\:border-\[\#2A2D36\],
+.light\:border-\[\#E5E7EB\] {
+  border-color: var(--border-color);
+}
+.text-\[\#A3A8AE\],
+.light\:text-\[\#6B7280\] {
+  color: var(--secondary-text);
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+.animate-spin {
+  animation: spin 1s linear infinite;
+}
