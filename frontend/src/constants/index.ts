@@ -1,5 +1,6 @@
 export const PAGINATION = {
   ITEMS_PER_PAGE: 4,
+  DEFAULT_PAGE: 1,
 } as const;
 
 export const THEME = {
@@ -32,7 +33,7 @@ export const API = {
     title: item.ogTitle || null,
     imageUrl: item.ogImageUrl || null,
     error: item.error || null,
-    createdAt: new Date(item.createdAt)
+    createdAt: new Date(item.createdAt).toISOString()
   })
 } as const;
 

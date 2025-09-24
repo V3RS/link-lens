@@ -6,22 +6,20 @@ import LatestSubmission from './components/LatestSubmission';
 import SubmissionHistory from './components/SubmissionHistory';
 import Footer from './components/Footer';
 import ThemeToggle from './components/ThemeToggle';
-import { useTheme, useSubmissions, usePagination } from './hooks';
+import { useTheme, useSubmissions } from './hooks';
 import { EXTERNAL_LINKS } from './constants';
 
 export function App() {
   const { theme, toggleTheme } = useTheme();
-  const { submissions, isLoading, isPolling, handleSubmit } = useSubmissions();
-  
-  const latestSubmission = submissions.length > 0 ? submissions[0] : null;
-  const historySubmissions = submissions.length > 1 ? submissions.slice(1) : [];
-  
-  const {
-    currentPage,
-    totalPages,
-    paginatedItems: paginatedSubmissions,
-    handlePageChange,
-  } = usePagination(historySubmissions);
+  const { 
+    latestSubmission,
+    historySubmissions, 
+    pagination, 
+    isLoading, 
+    isPolling, 
+    handleSubmit, 
+    handlePageChange 
+  } = useSubmissions();
 
   return <div className="min-h-screen app-bg flex flex-col">
       <div className="container mx-auto px-4 py-8 max-w-6xl flex-grow">
@@ -48,7 +46,12 @@ export function App() {
         <main className="mt-8 space-y-8">
           <SubmitForm onSubmit={handleSubmit} isLoading={isLoading} />
           <LatestSubmission submission={latestSubmission} />
-          <SubmissionHistory submissions={paginatedSubmissions} currentPage={currentPage} totalPages={totalPages} onPageChange={handlePageChange} />
+          <SubmissionHistory 
+            submissions={historySubmissions} 
+            currentPage={pagination.page} 
+            totalPages={pagination.totalPages} 
+            onPageChange={handlePageChange} 
+          />
         </main>
       </div>
       <Footer />
