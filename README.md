@@ -28,6 +28,14 @@ https://github.com/user-attachments/assets/ac5f4b24-79e9-4ba0-aced-7fac45e65eaf
 
 ## Getting Started
 
+### Setup Video
+
+
+
+https://github.com/user-attachments/assets/f144ea2e-afc4-4541-a8cc-e5e2b7ec1e1c
+
+
+
 ### Prerequisites
 
 - **Node.js** (v18+)
