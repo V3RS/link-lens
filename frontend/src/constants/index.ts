@@ -9,11 +9,6 @@ export const THEME = {
   CLASS_NAME: 'light-mode',
 } as const;
 
-export const SUBMISSION = {
-  ID_PREFIX: 'sub_',
-  PROCESSING_DELAY: 1000,
-  ERROR_MESSAGE: 'Failed to fetch data. Please try again.',
-} as const;
 
 const STATUS_MAP = {
   'QUEUED': 'queued',
@@ -43,6 +38,5 @@ export const EXTERNAL_LINKS = {
 } as const;
 
 export const STORAGE_KEYS = {
-  SUBMISSIONS: 'submissions',
   THEME: 'theme',
 } as const;

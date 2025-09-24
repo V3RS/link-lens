@@ -8,8 +8,3 @@ export const getRelativeTime = (dateString: string): string => {
   }
 };
 
-export const createPastDate = (hoursAgo: number): string => {
-  const date = new Date();
-  date.setHours(date.getHours() - hoursAgo);
-  return date.toISOString();
-};

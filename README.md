@@ -17,11 +17,13 @@ https://github.com/user-attachments/assets/ac5f4b24-79e9-4ba0-aced-7fac45e65eaf
   - [Backend Setup](#backend-setup)
   - [Frontend Setup](#frontend-setup)
   - [Visiting the App](#visiting-the-app)
+- [Project Structure](#project-structure)
 - [Key Features & Approach](#key-features--approach)
 - [Tech Stack & Rationale](#tech-stack--rationale)
 - [AI Partnership](#ai-partnership)
 - [Challenges & Solutions](#challenges--solutions)
 - [Testing & Quality](#testing--quality)
+- [Future Implementation](#future-implementation)
 - [Contact & Acknowledgements](#contact--acknowledgements)
 
 ## Getting Started
@@ -104,6 +106,61 @@ https://github.com/user-attachments/assets/ac5f4b24-79e9-4ba0-aced-7fac45e65eaf
 3. Backend queues and processes the URL asynchronously
 4. Frontend polls the API and shows real-time status updates
 5. View the extracted preview image, title, and submission history
+
+## Project Structure
+
+```
+link-lens/
+├── backend/                          # Node.js TypeScript API server
+│   ├── src/
+│   │   ├── app.ts                    # Express server setup & CORS config
+│   │   ├── env.ts                    # Environment variable validation
+│   │   ├── lib/
+│   │   │   ├── db.ts                 # Prisma database client
+│   │   │   ├── og.ts                 # Open Graph HTML parser
+│   │   │   └── queue.ts              # BullMQ queue configuration
+│   │   └── routes/
+│   │       └── submissions.ts        # API endpoints with pagination & validation
+│   ├── worker/
+│   │   └── index.ts                  # Background job processor
+│   ├── tests/                        # Comprehensive test suite
+│   │   ├── api.submissions.spec.ts   # API endpoint tests
+│   │   ├── db.integration.spec.ts    # Database integration tests
+│   │   ├── happy.e2e.spec.ts         # End-to-end workflow tests
+│   │   ├── parser.spec.ts            # HTML parsing unit tests
+│   │   ├── validation.spec.ts        # Input validation tests
+│   │   └── worker.spec.ts            # Background worker tests
+│   ├── prisma/
+│   │   ├── schema.prisma             # Database schema & relationships
+│   │   └── migrations/               # Database version control
+│   ├── docker-compose.yml            # PostgreSQL & Redis services
+│   └── package.json                  # Dependencies & scripts
+│
+└── frontend/                         # React TypeScript SPA
+    ├── src/
+    │   ├── App.tsx                   # Main application component
+    │   ├── components/
+    │   │   ├── Header.tsx            # App header with theme toggle
+    │   │   ├── Footer.tsx            # App footer with links
+    │   │   ├── SubmitForm.tsx        # URL submission form
+    │   │   ├── LatestSubmission.tsx  # Latest submission display
+    │   │   ├── SubmissionHistory.tsx # Paginated history view
+    │   │   ├── SubmissionCard.tsx    # Individual submission display
+    │   │   ├── StatusBadge.tsx       # Status indicator component
+    │   │   └── ThemeToggle.tsx       # Dark/light theme switcher
+    │   ├── hooks/
+    │   │   ├── useSubmissions.ts     # API integration & state management
+    │   │   ├── useTheme.ts           # Theme persistence & switching
+    │   │   └── useLocalStorage.ts    # LocalStorage utility hook
+    │   ├── constants/
+    │   │   └── index.ts              # App-wide constants & configuration
+    │   ├── utils/
+    │   │   ├── url.ts                # URL validation & formatting
+    │   │   └── date.ts               # Date formatting utilities
+    │   ├── types.ts                  # TypeScript interface definitions
+    │   └── index.tsx                 # React app entry point
+    └── package.json                  # Dependencies & build scripts
+```
 
 ## Key Features & Approach
 
@@ -217,6 +274,28 @@ cd backend
 npm test        # Run all tests
 npm run test:watch  # Watch mode for development
 ```
+
+## Future Implementation
+
+### UI/UX Enhancements
+- **Design Consistency** - Refactor latest submission to use the same reusable `SubmissionCard` component as history items for UI consistency and smaller footprint
+- **Favicon Integration** - Extract and display website favicons alongside Open Graph data, persisted in database for visual richness
+- **Advanced Filtering** - Add search functionality and status filters (complete, failed, etc.) with real-time results
+- **Bulk Operations** - Multi-select submissions for batch delete, export, or re-processing actions
+
+### Data & Performance Optimization  
+- **Smart URL Deduplication** - Check for existing URLs before creating new submissions, but maintain separate history entries for user context
+- **Soft Delete System** - Add `deleted_at` timestamp for submission removal without losing data, with toggle to show/hide deleted items
+- **Redis Caching Layer** - Cache frequently accessed submissions and Open Graph data to reduce database queries
+- **Image CDN Integration** - Optimize and serve Open Graph images through a CDN with automatic resizing and WebP conversion
+
+### Technical Infrastructure
+- **WebSocket Real-time Updates** - Replace polling with WebSocket connections for instant status updates and better scalability  
+- **Rate Limiting** - Implement per-IP submission limits and exponential backoff to prevent abuse
+- **API Versioning** - Add `/v1/` prefixed routes with backward compatibility for future API evolution
+- **Analytics Dashboard** - Track submission success rates, popular domains, processing times, and system health metrics
+- **User Authentication** - Add user accounts with personal submission history and custom API rate limits
+- **Export Functionality** - Generate CSV/JSON exports of submission history with filtering options
 
 ## Contact & Acknowledgements
 

@@ -1,7 +1,6 @@
 import { useState, useCallback, useEffect, useRef } from 'react';
 import { toast } from 'sonner';
 import { Submission, PaginatedResponse, PaginationMeta } from '../types';
-import { fetchOpenGraphData } from '../services/submissionService';
 import { API, PAGINATION } from '../constants';
 import { isValidUrl } from '../utils';
 
@@ -44,6 +43,20 @@ export function useSubmissions() {
       console.error('Failed to fetch latest submission:', error);
     }
     return null;
+  }, []);
+
+  const submitUrl = useCallback(async (url: string) => {
+    const response = await fetch(`${API.BASE_URL}/api/submissions`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ url }),
+    });
+
+    if (!response.ok) {
+      throw new Error('Failed to submit URL');
+    }
+
+    return response.json();
   }, []);
 
   const fetchHistoryPage = useCallback(async (page: number = pagination.page) => {
@@ -150,7 +163,7 @@ export function useSubmissions() {
 
     setIsLoading(true);
     try {
-      await fetchOpenGraphData(url);
+      await submitUrl(url);
       await fetchSubmissions(1);
       toast.success('URL submitted successfully!');
     } catch (error) {
@@ -159,7 +172,7 @@ export function useSubmissions() {
     } finally {
       setIsLoading(false);
     }
-  }, [fetchSubmissions]);
+  }, [submitUrl, fetchSubmissions]);
 
 
   return {
