@@ -101,6 +101,9 @@ I partnered with AI tools throughout this project to accelerate development whil
    npm run dev
    # Frontend runs on http://localhost:5173
    ```
+### Expected Result 
+
+3 terminals running (API server, worker, frontend dev server) and a working app at localhost:5173
 
 ### Visiting the App
 
