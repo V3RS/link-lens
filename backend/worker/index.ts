@@ -32,7 +32,6 @@ export async function processSubmission(job: { submissionId: string }): Promise<
     }
 
     const html = await fetchHtml(submission.url);
-
     const result = extractOg(html, submission.url);
 
     if (result.kind === 'no_og') {

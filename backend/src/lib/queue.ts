@@ -3,6 +3,7 @@ import { REDIS_URL } from '../env.js';
 
 export const queue = new Queue('og-scan', {
   connection: {
-    url: REDIS_URL,
+    host: 'localhost',
+    port: 6379,
   },
 });

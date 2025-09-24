@@ -14,6 +14,28 @@ export const SUBMISSION = {
   ERROR_MESSAGE: 'Failed to fetch data. Please try again.',
 } as const;
 
+const STATUS_MAP = {
+  'QUEUED': 'queued',
+  'PROCESSING': 'processing', 
+  'COMPLETE': 'complete',
+  'NO_OG': 'no image found',
+  'FAILED': 'failed'
+} as const;
+
+export const API = {
+  BASE_URL: 'http://localhost:3000',
+  STATUS_MAP,
+  convertSubmission: (item: any) => ({
+    id: item.id,
+    url: item.url,
+    status: STATUS_MAP[item.status as keyof typeof STATUS_MAP] || 'failed',
+    title: item.ogTitle || null,
+    imageUrl: item.ogImageUrl || null,
+    error: item.error || null,
+    createdAt: new Date(item.createdAt)
+  })
+} as const;
+
 export const EXTERNAL_LINKS = {
   GITHUB: 'https://github.com',
   PORTFOLIO: 'https://vsingh.dev/',
@@ -23,25 +45,3 @@ export const STORAGE_KEYS = {
   SUBMISSIONS: 'submissions',
   THEME: 'theme',
 } as const;
-
-export const SAMPLE_IMAGES = [
-  'https://images.unsplash.com/photo-1504805572947-34fad45aed93?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1470&q=80',
-  'https://images.unsplash.com/photo-1607799279861-4dd421887fb3?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1470&q=80',
-  'https://images.unsplash.com/photo-1620641788421-7a1c342ea42e?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1074&q=80',
-  'https://images.unsplash.com/photo-1581276879432-15e50529f34b?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1170&q=80',
-] as const;
-
-export const MOCK_URLS = [
-  'https://github.com/features',
-  'https://netflix.com',
-  'https://twitter.com/home',
-  'https://noimage.example.com',
-  'https://error.example.com',
-  'https://medium.com',
-  'https://dev.to',
-  'https://dribbble.com',
-  'https://behance.net',
-  'https://nytimes.com',
-  'https://spotify.com',
-  'https://airbnb.com',
-] as const;

@@ -1,22 +1,83 @@
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useEffect, useRef } from 'react';
 import { toast } from 'sonner';
 import { Submission } from '../types';
-import { useLocalStorage } from './useLocalStorage';
-import { fetchOpenGraphData, generateMockData } from '../services/submissionService';
-import { STORAGE_KEYS, SUBMISSION } from '../constants';
-import {
-  isValidUrl,
-  createNewSubmission,
-  updateSubmissionById,
-  replaceFirstSubmission,
-} from '../utils';
+import { fetchOpenGraphData } from '../services/submissionService';
+import { API } from '../constants';
+import { isValidUrl } from '../utils';
 
 export function useSubmissions() {
-  const [submissions, setSubmissions] = useLocalStorage<Submission[]>(
-    STORAGE_KEYS.SUBMISSIONS,
-    []
-  );
+  const [submissions, setSubmissions] = useState<Submission[]>([]);
   const [isLoading, setIsLoading] = useState(false);
+  const [isPolling, setIsPolling] = useState(false);
+  const pollingRef = useRef<NodeJS.Timeout | null>(null);
+  const previousSubmissionsRef = useRef<Submission[]>([]);
+
+  const fetchSubmissions = useCallback(async () => {
+    try {
+      const response = await fetch(`${API.BASE_URL}/api/submissions`);
+      if (response.ok) {
+        const data = await response.json();
+        const convertedSubmissions: Submission[] = data.map(API.convertSubmission);
+        
+        const previousSubmissions = previousSubmissionsRef.current;
+        if (previousSubmissions.length > 0) {
+          const previouslyProcessing = previousSubmissions.filter(sub => 
+            sub.status === 'processing' || sub.status === 'queued'
+          );
+          const nowCompleted = convertedSubmissions.filter(sub => 
+            sub.status === 'complete' && 
+            previouslyProcessing.some(prev => prev.id === sub.id)
+          );
+          
+          if (nowCompleted.length > 0) {
+            toast.success(`${nowCompleted.length} URL${nowCompleted.length === 1 ? '' : 's'} processed successfully!`);
+          }
+        }
+        
+        previousSubmissionsRef.current = convertedSubmissions;
+        setSubmissions(convertedSubmissions);
+      }
+    } catch (error) {
+      console.error('Failed to fetch submissions:', error);
+    }
+  }, []);
+
+  const hasActiveSubmissions = useCallback((subs: Submission[]) => {
+    return subs.some(sub => sub.status === 'queued' || sub.status === 'processing');
+  }, []);
+
+  const startPolling = useCallback(() => {
+    if (pollingRef.current) return;
+
+    setIsPolling(true);
+    pollingRef.current = setInterval(() => {
+      fetchSubmissions();
+    }, 2000);
+  }, [fetchSubmissions]);
+
+  const stopPolling = useCallback(() => {
+    if (pollingRef.current) {
+      clearInterval(pollingRef.current);
+      pollingRef.current = null;
+      setIsPolling(false);
+    }
+  }, []);
+
+  useEffect(() => {
+    if (hasActiveSubmissions(submissions)) {
+      startPolling();
+    } else {
+      stopPolling();
+    }
+  }, [submissions, hasActiveSubmissions, startPolling, stopPolling]);
+
+  useEffect(() => {
+    fetchSubmissions();
+  }, [fetchSubmissions]);
+
+  useEffect(() => {
+    return () => stopPolling();
+  }, [stopPolling]);
 
   const handleSubmit = useCallback(async (url: string) => {
     if (!isValidUrl(url)) {
@@ -24,57 +85,25 @@ export function useSubmissions() {
       return;
     }
 
+    setIsLoading(true);
     try {
-      const newSubmission = createNewSubmission(url);
-      const updatedSubmissions = [newSubmission, ...submissions];
-      
-      setSubmissions(updatedSubmissions);
-      setIsLoading(true);
-
-      setTimeout(() => {
-        const processingSubmission = { ...newSubmission, status: 'processing' as const };
-        const withProcessing = updateSubmissionById(
-          submissions,
-          newSubmission.id,
-          { status: 'processing' }
-        );
-        const finalWithProcessing = replaceFirstSubmission(withProcessing, processingSubmission);
-        setSubmissions(finalWithProcessing);
-      }, SUBMISSION.PROCESSING_DELAY);
-
-      const result = await fetchOpenGraphData(url);
+      await fetchOpenGraphData(url);
+      await fetchSubmissions();
+      toast.success('URL submitted successfully!');
+    } catch (error) {
+      console.error('Submission error:', error);
+      toast.error('Failed to submit URL. Please try again.');
+    } finally {
       setIsLoading(false);
-
-      const finalSubmission = { ...newSubmission, ...result };
-      const updatedFinal = updateSubmissionById(
-        submissions,
-        newSubmission.id,
-        result
-      );
-      const finalResult = replaceFirstSubmission(updatedFinal, finalSubmission);
-      setSubmissions(finalResult);
-    } catch {
-      setIsLoading(false);
-      const updatedWithError = updateSubmissionById(
-        submissions,
-        submissions[0].id,
-        { status: 'failed', error: SUBMISSION.ERROR_MESSAGE }
-      );
-      setSubmissions(updatedWithError);
     }
-  }, [submissions, setSubmissions]);
+  }, [fetchSubmissions]);
 
-  const handleAddMockData = useCallback(() => {
-    const mockData = generateMockData();
-    const updatedSubmissions = [...mockData, ...submissions];
-    setSubmissions(updatedSubmissions);
-    toast.success('Added mock data successfully!');
-  }, [submissions, setSubmissions]);
 
   return {
     submissions,
     isLoading,
+    isPolling,
     handleSubmit,
-    handleAddMockData,
+    refreshSubmissions: fetchSubmissions,
   };
 }

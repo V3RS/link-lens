@@ -11,7 +11,7 @@ import { EXTERNAL_LINKS } from './constants';
 
 export function App() {
   const { theme, toggleTheme } = useTheme();
-  const { submissions, isLoading, handleSubmit, handleAddMockData } = useSubmissions();
+  const { submissions, isLoading, isPolling, handleSubmit } = useSubmissions();
   
   const latestSubmission = submissions.length > 0 ? submissions[0] : null;
   const historySubmissions = submissions.length > 1 ? submissions.slice(1) : [];
@@ -21,17 +21,20 @@ export function App() {
     totalPages,
     paginatedItems: paginatedSubmissions,
     handlePageChange,
-    resetToFirstPage,
   } = usePagination(historySubmissions);
 
-  const handleMockDataWithReset = () => {
-    handleAddMockData();
-    resetToFirstPage();
-  };
   return <div className="min-h-screen app-bg flex flex-col">
       <div className="container mx-auto px-4 py-8 max-w-6xl flex-grow">
         <div className="flex justify-between items-center">
-          <Header />
+          <div className="flex items-center space-x-3">
+            <Header />
+            {isPolling && (
+              <div className="flex items-center space-x-2 px-3 py-1 rounded-full bg-yellow-500/10 border border-yellow-500/20">
+                <div className="w-2 h-2 bg-yellow-500 rounded-full animate-pulse"></div>
+                <span className="text-xs text-yellow-600 dark:text-yellow-400">Updating...</span>
+              </div>
+            )}
+          </div>
           <div className="flex items-center space-x-3">
             <a href={EXTERNAL_LINKS.GITHUB} target="_blank" rel="noopener noreferrer" className="p-2 rounded-full button-bg transition-colors" aria-label="GitHub Repository">
               <GithubIcon size={20} className="text-theme" />
@@ -43,7 +46,7 @@ export function App() {
           </div>
         </div>
         <main className="mt-8 space-y-8">
-          <SubmitForm onSubmit={handleSubmit} onAddMockData={handleMockDataWithReset} isLoading={isLoading} />
+          <SubmitForm onSubmit={handleSubmit} isLoading={isLoading} />
           <LatestSubmission submission={latestSubmission} />
           <SubmissionHistory submissions={paginatedSubmissions} currentPage={currentPage} totalPages={totalPages} onPageChange={handlePageChange} />
         </main>
