@@ -31,15 +31,44 @@ router.post('/', async (req, res) => {
   }
 });
 
+const getSubmissionsSchema = z.object({
+  page: z.coerce.number().min(1).default(1),
+  limit: z.coerce.number().min(1).max(50).default(10),
+  offset: z.coerce.number().min(0).optional(),
+});
+
 router.get('/', async (req, res) => {
   try {
-    const submissions = await prisma.submission.findMany({
-      orderBy: { createdAt: 'desc' },
-      take: 100,
-    });
+    const { page, limit, offset } = getSubmissionsSchema.parse(req.query);
+    const skip = offset !== undefined ? offset : (page - 1) * limit;
 
-    res.json(submissions);
+    const [submissions, total] = await Promise.all([
+      prisma.submission.findMany({
+        orderBy: { createdAt: 'desc' },
+        skip,
+        take: limit,
+      }),
+      prisma.submission.count(),
+    ]);
+
+    const totalPages = Math.ceil(total / limit);
+
+    res.json({
+      data: submissions,
+      pagination: {
+        page: offset !== undefined ? Math.floor(skip / limit) + 1 : page,
+        limit,
+        total,
+        totalPages,
+        hasNext: skip + limit < total,
+        hasPrevious: skip > 0,
+        offset: skip,
+      },
+    });
   } catch (error) {
+    if (error instanceof z.ZodError) {
+      return res.status(400).json({ error: 'Invalid pagination parameters' });
+    }
     res.status(500).json({ error: 'Internal server error' });
   }
 });

@@ -14,6 +14,7 @@ vi.mock('@/lib/db.js', () => ({
     submission: {
       create: vi.fn(),
       findMany: vi.fn(),
+      count: vi.fn(),
     },
   },
 }));
@@ -82,7 +83,7 @@ describe('API /api/submissions', () => {
   });
 
   describe('GET /api/submissions', () => {
-    it('returns array ordered by createdAt desc, limited to 100', async () => {
+    it('returns paginated response with default parameters', async () => {
       const mockSubmissions = [
         {
           id: 'newer',
@@ -99,30 +100,103 @@ describe('API /api/submissions', () => {
       ];
 
       vi.mocked(prisma.submission.findMany).mockResolvedValue(mockSubmissions as any);
+      vi.mocked(prisma.submission.count).mockResolvedValue(15);
 
       const response = await request(app)
         .get('/api/submissions');
 
       expect(response.status).toBe(200);
-      // JSON response serializes dates to ISO strings
-      expect(response.body).toEqual([
-        {
-          id: 'newer',
-          url: 'https://newer.com',
-          status: 'COMPLETE',
-          createdAt: '2023-12-02T00:00:00.000Z',
+      expect(response.body).toEqual({
+        data: [
+          {
+            id: 'newer',
+            url: 'https://newer.com',
+            status: 'COMPLETE',
+            createdAt: '2023-12-02T00:00:00.000Z',
+          },
+          {
+            id: 'older',
+            url: 'https://older.com',
+            status: 'COMPLETE',
+            createdAt: '2023-12-01T00:00:00.000Z',
+          },
+        ],
+        pagination: {
+          page: 1,
+          limit: 10,
+          total: 15,
+          totalPages: 2,
+          hasNext: true,
+          hasPrevious: false,
+          offset: 0,
         },
-        {
-          id: 'older',
-          url: 'https://older.com',
-          status: 'COMPLETE',
-          createdAt: '2023-12-01T00:00:00.000Z',
-        },
-      ]);
+      });
       expect(prisma.submission.findMany).toHaveBeenCalledWith({
         orderBy: { createdAt: 'desc' },
-        take: 100,
+        skip: 0,
+        take: 10,
       });
+      expect(prisma.submission.count).toHaveBeenCalled();
+    });
+
+    it('handles custom pagination parameters', async () => {
+      const mockSubmissions = [{ id: 'test', status: 'COMPLETE' }];
+      
+      vi.mocked(prisma.submission.findMany).mockResolvedValue(mockSubmissions as any);
+      vi.mocked(prisma.submission.count).mockResolvedValue(25);
+
+      const response = await request(app)
+        .get('/api/submissions?page=3&limit=5');
+
+      expect(response.status).toBe(200);
+      expect(response.body.pagination).toEqual({
+        page: 3,
+        limit: 5,
+        total: 25,
+        totalPages: 5,
+        hasNext: true,
+        hasPrevious: true,
+        offset: 10,
+      });
+      expect(prisma.submission.findMany).toHaveBeenCalledWith({
+        orderBy: { createdAt: 'desc' },
+        skip: 10,
+        take: 5,
+      });
+    });
+
+    it('handles offset parameter', async () => {
+      const mockSubmissions = [{ id: 'test', status: 'COMPLETE' }];
+      
+      vi.mocked(prisma.submission.findMany).mockResolvedValue(mockSubmissions as any);
+      vi.mocked(prisma.submission.count).mockResolvedValue(25);
+
+      const response = await request(app)
+        .get('/api/submissions?offset=5&limit=4');
+
+      expect(response.status).toBe(200);
+      expect(response.body.pagination).toEqual({
+        page: 2,
+        limit: 4,
+        total: 25,
+        totalPages: 7,
+        hasNext: true,
+        hasPrevious: true,
+        offset: 5,
+      });
+      expect(prisma.submission.findMany).toHaveBeenCalledWith({
+        orderBy: { createdAt: 'desc' },
+        skip: 5,
+        take: 4,
+      });
+    });
+
+    it('returns 400 for invalid pagination parameters', async () => {
+      const response = await request(app)
+        .get('/api/submissions?page=0&limit=100');
+
+      expect(response.status).toBe(400);
+      expect(response.body.error).toBe('Invalid pagination parameters');
     });
   });
 });

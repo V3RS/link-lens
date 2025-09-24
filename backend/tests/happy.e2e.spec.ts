@@ -45,8 +45,10 @@ describe('Happy Path E2E', () => {
       .get('/api/submissions');
 
     expect(getResponse.status).toBe(200);
+    expect(getResponse.body).toHaveProperty('data');
+    expect(getResponse.body).toHaveProperty('pagination');
     
-    const submission = getResponse.body.find((s: any) => s.id === submissionId);
+    const submission = getResponse.body.data.find((s: any) => s.id === submissionId);
     expect(submission.status).toBe('COMPLETE');
     expect(submission.ogImageUrl).toBe('https://test.com/image.png');
     expect(submission.ogTitle).toBe('Test Title');
