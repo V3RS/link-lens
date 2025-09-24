@@ -19,6 +19,16 @@ A modern web application for previewing links with real-time processing. Users c
 
 I picked a lot of technologies based on familiarity so I could give this project my best effort, while still balancing modern, practical choices.
 
+### Key Technology Tradeoffs
+
+**BullMQ vs. Simple Job Processing**: Chose BullMQ over simpler alternatives (like `setTimeout` or direct processing) for production-ready features like job persistence, retries, and monitoring capabilities.
+
+**Prisma vs. Raw SQL**: Traded some performance for developer experience and type safety. Prisma's migrations and schema management significantly outweighed the slight query overhead.
+
+**Server-Side vs. Client-Side Pagination**: Initially implemented client-side pagination for simplicity, but refactored to server-side for scalability - a good example of evolving architecture as requirements become clearer.
+
+**Polling vs. WebSockets**: Chose intelligent polling over WebSockets to avoid connection management complexity while still providing real-time feel for the 95% use case where jobs complete quickly.
+
 ## AI Partnership
 
 I partnered with AI tools throughout this project to accelerate development while maintaining high code quality. Cursor helped with architecture scaffolding and code generation, while I used various AI tools for research and problem-solving. The AI partnership enabled me to focus on architecture decisions and business logic rather than boilerplate, while ensuring I understood and could maintain every line of code.
