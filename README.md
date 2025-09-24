@@ -2,6 +2,14 @@
 
 A modern web application for previewing links with real-time processing. Users can submit URLs, and Link Lens asynchronously extracts Open Graph metadata to display rich previews with images and titles. Built with a focus on performance, reliability, and user experience.
 
+## Preview
+
+
+
+https://github.com/user-attachments/assets/ac5f4b24-79e9-4ba0-aced-7fac45e65eaf
+
+
+
 ## Table of Contents
 
 - [Getting Started](#getting-started)
