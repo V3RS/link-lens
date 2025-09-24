@@ -2,36 +2,19 @@
 
 A modern web application for previewing links with real-time processing. Users can submit URLs, and Link Lens asynchronously extracts Open Graph metadata to display rich previews with images and titles. Built with a focus on performance, reliability, and user experience.
 
-## Tech Stack & Rationale
+## Table of Contents
 
-| Technology | Why I Picked It |
-|------------|----------------|
-| Node.js + TypeScript | Type safety and modern JavaScript features for robust backend development |
-| Express | Lightweight, flexible web framework with excellent middleware ecosystem |
-| Prisma + PostgreSQL | Type-safe ORM with excellent developer experience and reliable relational database |
-| BullMQ + Redis | Robust job queue system for handling asynchronous URL processing |
-| undici | Modern, high-performance HTTP client with built-in timeout and retry capabilities |
-| node-html-parser | Fast, lightweight HTML parser for extracting Open Graph metadata |
-| Zod | Runtime type validation with excellent TypeScript integration |
-| Vitest + Supertest | Modern testing framework with comprehensive API testing capabilities |
-| React + Vite | Fast development experience with modern React tooling |
-| Tailwind CSS | Utility-first CSS for rapid, consistent UI development |
-
-I picked a lot of technologies based on familiarity so I could give this project my best effort, while still balancing modern, practical choices.
-
-### Key Technology Tradeoffs
-
-**BullMQ vs. Simple Job Processing**: Chose BullMQ over simpler alternatives (like `setTimeout` or direct processing) for production-ready features like job persistence, retries, and monitoring capabilities.
-
-**Prisma vs. Raw SQL**: Traded some performance for developer experience and type safety. Prisma's migrations and schema management significantly outweighed the slight query overhead.
-
-**Server-Side vs. Client-Side Pagination**: Initially implemented client-side pagination for simplicity, but refactored to server-side for scalability - a good example of evolving architecture as requirements become clearer.
-
-**Polling vs. WebSockets**: Chose intelligent polling over WebSockets to avoid connection management complexity while still providing real-time feel for the 95% use case where jobs complete quickly.
-
-## AI Partnership
-
-I partnered with AI tools throughout this project to accelerate development while maintaining high code quality. Cursor helped with architecture scaffolding and code generation, while I used various AI tools for research and problem-solving. The AI partnership enabled me to focus on architecture decisions and business logic rather than boilerplate, while ensuring I understood and could maintain every line of code.
+- [Getting Started](#getting-started)
+  - [Prerequisites](#prerequisites)
+  - [Backend Setup](#backend-setup)
+  - [Frontend Setup](#frontend-setup)
+  - [Visiting the App](#visiting-the-app)
+- [Key Features & Approach](#key-features--approach)
+- [Tech Stack & Rationale](#tech-stack--rationale)
+- [AI Partnership](#ai-partnership)
+- [Challenges & Solutions](#challenges--solutions)
+- [Testing & Quality](#testing--quality)
+- [Contact & Acknowledgements](#contact--acknowledgements)
 
 ## Getting Started
 
@@ -145,6 +128,37 @@ I chose an **asynchronous queue-based architecture** over inline processing for 
 4. **Extract Open Graph data** → Parses HTML for `og:image`, `og:title`, etc.
 5. **Update database** → Status becomes `COMPLETE`, `NO_OG`, or `FAILED`
 6. **Frontend polls API** → Real-time updates shown to user with toast notifications
+
+## Tech Stack & Rationale
+
+| Technology | Why I Picked It |
+|------------|----------------|
+| Node.js + TypeScript | Type safety and modern JavaScript features for robust backend development |
+| Express | Lightweight, flexible web framework with excellent middleware ecosystem |
+| Prisma + PostgreSQL | Type-safe ORM with excellent developer experience and reliable relational database |
+| BullMQ + Redis | Robust job queue system for handling asynchronous URL processing |
+| undici | Modern, high-performance HTTP client with built-in timeout and retry capabilities |
+| node-html-parser | Fast, lightweight HTML parser for extracting Open Graph metadata |
+| Zod | Runtime type validation with excellent TypeScript integration |
+| Vitest + Supertest | Modern testing framework with comprehensive API testing capabilities |
+| React + Vite | Fast development experience with modern React tooling |
+| Tailwind CSS | Utility-first CSS for rapid, consistent UI development |
+
+I picked a lot of technologies based on familiarity so I could give this project my best effort, while still balancing modern, practical choices.
+
+### Key Technology Tradeoffs
+
+**BullMQ vs. Simple Job Processing**: Chose BullMQ over simpler alternatives (like `setTimeout` or direct processing) for production-ready features like job persistence, retries, and monitoring capabilities.
+
+**Prisma vs. Raw SQL**: Traded some performance for developer experience and type safety. Prisma's migrations and schema management significantly outweighed the slight query overhead.
+
+**Server-Side vs. Client-Side Pagination**: Initially implemented client-side pagination for simplicity, but refactored to server-side for scalability - a good example of evolving architecture as requirements become clearer.
+
+**Polling vs. WebSockets**: Chose intelligent polling over WebSockets to avoid connection management complexity while still providing real-time feel for the 95% use case where jobs complete quickly.
+
+## AI Partnership
+
+I partnered with AI tools throughout this project to accelerate development while maintaining high code quality. Cursor helped with architecture scaffolding and code generation, while I used various AI tools for research and problem-solving. The AI partnership enabled me to focus on architecture decisions and business logic rather than boilerplate, while ensuring I understood and could maintain every line of code.
 
 ## Challenges & Solutions
 
