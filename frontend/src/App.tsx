@@ -28,16 +28,16 @@ export function App() {
     handleAddMockData();
     resetToFirstPage();
   };
-  return <div className={`min-h-screen ${theme === 'dark' ? 'bg-[#0B0C0E] text-[#EAECEF]' : 'bg-[#F5F7FA] text-[#1A1D23]'} flex flex-col`}>
+  return <div className="min-h-screen app-bg flex flex-col">
       <div className="container mx-auto px-4 py-8 max-w-6xl flex-grow">
         <div className="flex justify-between items-center">
           <Header />
           <div className="flex items-center space-x-3">
-            <a href={EXTERNAL_LINKS.GITHUB} target="_blank" rel="noopener noreferrer" className={`p-2 rounded-full ${theme === 'dark' ? 'bg-[#1E2128] hover:bg-[#2A2D36]' : 'bg-[#F0F2F5] hover:bg-[#E5E7EB]'} transition-colors`} aria-label="GitHub Repository">
-              <GithubIcon size={20} className={theme === 'dark' ? 'text-[#EAECEF]' : 'text-[#1A1D23]'} />
+            <a href={EXTERNAL_LINKS.GITHUB} target="_blank" rel="noopener noreferrer" className="p-2 rounded-full button-bg transition-colors" aria-label="GitHub Repository">
+              <GithubIcon size={20} className="text-theme" />
             </a>
-            <a href={EXTERNAL_LINKS.PORTFOLIO} target="_blank" rel="noopener noreferrer" className={`p-2 rounded-full ${theme === 'dark' ? 'bg-[#1E2128] hover:bg-[#2A2D36]' : 'bg-[#F0F2F5] hover:bg-[#E5E7EB]'} transition-colors`} aria-label="Veer Singh's Portfolio">
-              <GlobeIcon size={20} className={theme === 'dark' ? 'text-[#EAECEF]' : 'text-[#1A1D23]'} />
+            <a href={EXTERNAL_LINKS.PORTFOLIO} target="_blank" rel="noopener noreferrer" className="p-2 rounded-full button-bg transition-colors" aria-label="Veer Singh's Portfolio">
+              <GlobeIcon size={20} className="text-theme" />
             </a>
             <ThemeToggle theme={theme} onToggle={toggleTheme} />
           </div>
@@ -48,7 +48,7 @@ export function App() {
           <SubmissionHistory submissions={paginatedSubmissions} currentPage={currentPage} totalPages={totalPages} onPageChange={handlePageChange} />
         </main>
       </div>
-      <Footer theme={theme} />
+      <Footer />
       <Toaster position="top-center" richColors />
     </div>;
 }

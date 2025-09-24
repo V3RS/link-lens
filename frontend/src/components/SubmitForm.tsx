@@ -17,15 +17,15 @@ const SubmitForm = ({
       setUrl('');
     }
   };
-  return <section className="bg-[#14161A] dark:bg-[#14161A] light:bg-[#FFFFFF] rounded-lg p-6 shadow-md">
+  return <section className="card-bg rounded-lg p-6 shadow-md">
       <form onSubmit={handleSubmit} className="space-y-4">
         <div className="flex flex-col gap-4">
           <div className="flex-grow">
             <label htmlFor="url-input" className="block mb-2 font-medium">
               Website URL
             </label>
-            <input id="url-input" type="text" value={url} onChange={e => setUrl(e.target.value)} placeholder="https://example.com" className="w-full px-4 py-3 rounded-lg dark:bg-[#1E2128] dark:border-[#2A2D36] light:bg-[#F0F2F5] light:border-[#D1D5DB] border text-inherit placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-[#33CC99]" disabled={isLoading} />
-            <p className="mt-2 text-sm text-[#A3A8AE] light:text-[#6B7280]">
+            <input id="url-input" type="text" value={url} onChange={e => setUrl(e.target.value)} placeholder="https://example.com" className="w-full px-4 py-3 rounded-lg input-bg border-theme border text-theme placeholder-theme focus:outline-none focus:ring-2 focus:ring-[#33CC99]" disabled={isLoading} />
+            <p className="mt-2 text-sm text-secondary">
               We will fetch the page in the background and show the preview
               image if available.
             </p>
@@ -40,7 +40,7 @@ const SubmitForm = ({
                   Processing
                 </span> : 'Submit'}
             </button>
-            <button type="button" onClick={onAddMockData} className="px-6 py-3 bg-[#2A2D36] light:bg-white text-inherit font-medium rounded-lg hover:bg-opacity-80 focus:outline-none focus:ring-2 focus:ring-[#5B9DFF] focus:ring-opacity-50 min-w-[120px]">
+            <button type="button" onClick={onAddMockData} className="px-6 py-3 button-bg text-theme font-medium rounded-lg hover:bg-opacity-80 focus:outline-none focus:ring-2 focus:ring-[#5B9DFF] focus:ring-opacity-50 min-w-[120px]">
               Add Mock Data
             </button>
           </div>

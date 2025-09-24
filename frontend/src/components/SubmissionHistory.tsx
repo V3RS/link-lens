@@ -15,8 +15,8 @@ const SubmissionHistory = ({
 }: SubmissionHistoryProps) => {
   return <section id="history-section">
       <h2 className="text-xl font-semibold mb-4">History</h2>
-      {submissions.length === 0 ? <div className="bg-[#14161A] dark:bg-[#14161A] light:bg-[#FFFFFF] rounded-lg p-8 text-center border dark:border-[#2A2D36] light:border-[#E5E7EB]">
-          <p className="text-[#A3A8AE] light:text-[#6B7280]">
+      {submissions.length === 0 ? <div className="card-bg rounded-lg p-8 text-center border border-theme">
+          <p className="text-secondary">
             No history yet. Your submissions will appear here.
           </p>
         </div> : <>
@@ -27,7 +27,7 @@ const SubmissionHistory = ({
               <button 
                 onClick={() => onPageChange(1)} 
                 disabled={currentPage === 1} 
-                className="p-2 rounded-md dark:bg-[#1E2128] light:bg-[#F0F2F5] disabled:opacity-50 disabled:cursor-not-allowed hover:dark:bg-[#2A2D36] hover:light:bg-[#E5E7EB] transition-colors" 
+                className="p-2 rounded-md button-bg disabled:opacity-50 disabled:cursor-not-allowed transition-colors" 
                 aria-label="First page"
                 title="First page"
               >
@@ -36,21 +36,21 @@ const SubmissionHistory = ({
               <button 
                 onClick={() => onPageChange(currentPage - 1)} 
                 disabled={currentPage === 1} 
-                className="p-2 rounded-md dark:bg-[#1E2128] light:bg-[#F0F2F5] disabled:opacity-50 disabled:cursor-not-allowed hover:dark:bg-[#2A2D36] hover:light:bg-[#E5E7EB] transition-colors" 
+                className="p-2 rounded-md button-bg disabled:opacity-50 disabled:cursor-not-allowed transition-colors" 
                 aria-label="Previous page"
                 title="Previous page"
               >
                 <ChevronLeftIcon size={18} />
               </button>
               <div className="flex items-center space-x-3 px-2">
-                <span className="text-sm text-[#A3A8AE] light:text-[#6B7280] whitespace-nowrap">
+                <span className="text-sm text-secondary whitespace-nowrap">
                   Page
                 </span>
                 <div className="flex items-center space-x-2">
                   <span className="font-semibold min-w-[2ch] text-center">
                     {currentPage}
                   </span>
-                  <span className="text-[#A3A8AE] light:text-[#6B7280]">
+                  <span className="text-secondary">
                     of
                   </span>
                   <span className="font-semibold min-w-[2ch] text-center">
@@ -61,7 +61,7 @@ const SubmissionHistory = ({
               <button 
                 onClick={() => onPageChange(currentPage + 1)} 
                 disabled={currentPage === totalPages} 
-                className="p-2 rounded-md dark:bg-[#1E2128] light:bg-[#F0F2F5] disabled:opacity-50 disabled:cursor-not-allowed hover:dark:bg-[#2A2D36] hover:light:bg-[#E5E7EB] transition-colors" 
+                className="p-2 rounded-md button-bg disabled:opacity-50 disabled:cursor-not-allowed transition-colors" 
                 aria-label="Next page"
                 title="Next page"
               >
@@ -70,7 +70,7 @@ const SubmissionHistory = ({
               <button 
                 onClick={() => onPageChange(totalPages)} 
                 disabled={currentPage === totalPages} 
-                className="p-2 rounded-md dark:bg-[#1E2128] light:bg-[#F0F2F5] disabled:opacity-50 disabled:cursor-not-allowed hover:dark:bg-[#2A2D36] hover:light:bg-[#E5E7EB] transition-colors" 
+                className="p-2 rounded-md button-bg disabled:opacity-50 disabled:cursor-not-allowed transition-colors" 
                 aria-label="Last page"
                 title="Last page"
               >

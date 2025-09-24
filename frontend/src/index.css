@@ -8,10 +8,12 @@
   --card-bg: #14161A;
   --input-bg: #1E2128;
   --border-color: #2A2D36;
-  --placeholder-color: #A3A8AE;
+  --placeholder-color: #9CA3AF;
   --secondary-text: #A3A8AE;
   --accent-color: #33CC99;
   --accent-hover: #2BB788;
+  --button-bg: #1E2128;
+  --button-hover: #2A2D36;
 }
 
 .light-mode {
@@ -24,38 +26,45 @@
   --secondary-text: #6B7280;
   --accent-color: #33CC99;
   --accent-hover: #2BB788;
+  --button-bg: #F0F2F5;
+  --button-hover: #E5E7EB;
 }
 
-.dark\:bg-\[\#0B0C0E\] {
+.app-bg {
   background-color: var(--bg-color);
-}
-.dark\:text-\[\#EAECEF\] {
   color: var(--text-color);
 }
-.dark\:bg-\[\#14161A\] {
+
+.card-bg {
   background-color: var(--card-bg);
 }
-.light\:bg-\[\#FFFFFF\], 
-.light\:bg-white {
-  background-color: var(--card-bg);
-}
-.light\:bg-\[\#F5F7FA\] {
-  background-color: var(--bg-color);
-}
-.light\:text-\[\#1A1D23\] {
-  color: var(--text-color);
-}
-.dark\:bg-\[\#1E2128\],
-.light\:bg-\[\#F0F2F5\] {
+
+.input-bg {
   background-color: var(--input-bg);
 }
-.dark\:border-\[\#2A2D36\],
-.light\:border-\[\#E5E7EB\] {
+
+.button-bg {
+  background-color: var(--button-bg);
+}
+
+.button-bg:hover {
+  background-color: var(--button-hover);
+}
+
+.text-secondary {
+  color: var(--secondary-text);
+}
+
+.border-theme {
   border-color: var(--border-color);
 }
-.text-\[\#A3A8AE\],
-.light\:text-\[\#6B7280\] {
-  color: var(--secondary-text);
+
+.text-theme {
+  color: var(--text-color);
+}
+
+.placeholder-theme::placeholder {
+  color: var(--placeholder-color);
 }
 
 @keyframes spin {

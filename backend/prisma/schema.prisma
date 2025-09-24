@@ -1,0 +1,27 @@
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model Submission {
+  id         String   @id @default(cuid())
+  url        String
+  status     Status   @default(QUEUED)
+  ogImageUrl String?
+  ogTitle    String?
+  error      String?
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+}
+
+enum Status {
+  QUEUED
+  PROCESSING
+  COMPLETE
+  NO_OG
+  FAILED
+}
