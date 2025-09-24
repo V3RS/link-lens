@@ -210,7 +210,7 @@ I chose an **asynchronous queue-based architecture** over inline processing for 
 | React + Vite | Fast development experience with modern React tooling |
 | Tailwind CSS | Utility-first CSS for rapid, consistent UI development |
 
-I picked a lot of technologies based on familiarity so I could give this project my best effort, while still balancing modern, practical choices.
+I chose this stack based on both familiarity and practicality so I could give the project my best effort within the timebox. While the prompt suggested several backend frameworks, Jeff also encouraged me to lean on technologies I’m most comfortable with. That guidance helped me strike a balance between moving quickly with tools I know well and making thoughtful, modern choices that align with production-ready practices.
 
 ### Key Technology Tradeoffs
 
