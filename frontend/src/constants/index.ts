@@ -38,7 +38,7 @@ export const API = {
 } as const;
 
 export const EXTERNAL_LINKS = {
-  GITHUB: 'https://github.com',
+  GITHUB: 'https://github.com/V3RS/link-lens',
   PORTFOLIO: 'https://vsingh.dev/',
 } as const;
 
