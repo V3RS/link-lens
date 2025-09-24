@@ -44,7 +44,8 @@ https://github.com/user-attachments/assets/ac5f4b24-79e9-4ba0-aced-7fac45e65eaf
 
 1. **Clone and navigate to backend**
    ```bash
-   git clone <repository-url>
+   git clone https://github.com/V3RS/link-lens.git
+   cd link-lens
    cd backend
    ```
 
